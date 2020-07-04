@@ -56,17 +56,17 @@ echo -e "\e[31mMounted filesystems:\e[0m" && df -h ; echo -e "\e[31mUnmounted fi
 echo -e "\e[31mFiles with sticky bit:\e[0m" && find / -perm -1000 -type d 2>/dev/null 
 echo -e "\e[31mFiles run as group, not user:\e[0m" && find / -perm -g=s -type f 2>/dev/null
 echo -e "\e[31mFiles run as owner, not user:\e[0m" && find / -perm -u=s -type f 2>/dev/null
-echo -e "\e[31mWorld writeable files:\e[0m" && find / -writable -type d 2>/dev/null
-echo -e "\e[31mWorld executable files:\e[0m" && find / -perm -o x -type d 2>/dev/null
+echo -e "\e[31mWorld writeable files:\e[0m" && find / -writable 2>/dev/null
+echo -e "\e[31mWorld executable files:\e[0m" && find / -perm -o x 2>/dev/null
 echo -e "\e[31mFiles with no owner:\e[0m" && find / -xdev \( -nouser -o -nogroup \) -print
 
 echo -e "\e[31mPrepare & Find Exploit Code\e[0m"
 tools=("perl*" "python*" "gcc*" "cc") ; upload=("wget" "nc*" "netcat*" "tftp*" "ftp")
 echo -e "\e[31mSupported Languages:\e[0m" && for t in "${tools[@]}" ; do 
-	if [[ $( find / -name "${t}" )!="" ]]; then echo "$t is present." ; fi
+	if [[ $( find / -name "${t}" 2>&1 /dev/null )!="" ]]; then echo "$t is present." ; fi
 done
 echo -e "\e[31mMethods of upload:\e[0m" && for u in "${upload[@]}" ; do 
-	if [[ $( find / -name "${u}" )!="" ]]; then echo "$u is present." ; fi 
+	if [[ $( find / -name "${u}" 2>&1 /dev/null )!="" ]]; then echo "$u is present." ; fi 
 done
 echo "Points not tested: port forwarding, SSH tunnelling and packet sniffing (check if no luck with any of the above!)"
 exit 0

